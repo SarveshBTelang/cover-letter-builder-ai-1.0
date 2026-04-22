@@ -123,10 +123,10 @@ async def generate(data: RequestLetterService):
 
     return FileResponse(
         path=pdf_file,
-        filename=config.get("OUTPUT_FILE_NAME", "output.pdf"),
+        filename=config["OUTPUT_FILE_NAME"],
         media_type="application/pdf",
         headers={
-            "Content-Disposition": f'attachment; filename="{config.get("OUTPUT_FILE_NAME", "output.pdf")}.pdf"'
+            "Content-Disposition": f'attachment; filename="{config["OUTPUT_FILE_NAME"]}.pdf"'
         }
     )
 

@@ -116,7 +116,7 @@ Write a professional cover letter BODY paragraph.
 RULES:
 - Only output the BODY text (no subject, no greeting, no signature)
 - Assume the greeting as "Dear Hiring Manager"
-- Keep it concise ({config['BODY_WORD_COUNT']} words) but ensure it doesn't cut off.
+- Write in {config['BODY_WORD_COUNT']} words (this should fit ~1 page in Word with 12pt font, normal margins).
 - Strictly use the provided instructions and context
 - Avoid generic phrases
 - Today's date is {config['DATE']}

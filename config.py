@@ -19,9 +19,7 @@ def get_default_config():
         "LOCATION": "Stuttgart, Deutschland",
         "POSITION": "Machine Learning Engineer Position",
         "GREETING": "Hiring Manager",
-        "JOB_DESCRIPTION" : """ YOUR ROLE
-
-        Machine Learning Applications: You will develop modern, scalable machine learning solutions on the Google Cloud.
+        "JOB_DESCRIPTION" : """ YOUR ROLE Machine Learning Applications: You will develop modern, scalable machine learning solutions on the Google Cloud.
 
         Deployment: You use Python to integrate machine learning models into production-ready data pipelines.
 
@@ -31,18 +29,8 @@ def get_default_config():
 
         Software architecture: You will contribute to the design and consulting for component-based software architectures.
 
-        YOUR PROFILE
-
-        Completed education: You have completed a degree or vocational training in the IT field.
-
-        Machine Learning Experience: You bring experience in machine learning, deep learning, and computational linguistics.
-
-        Programming skills: You are proficient in Python and other common technologies.
-
-        Google APIs: Experience in web service standards and Google APIs (Google Cloud Platform, Google Maps Platform) is also advantageous.
-
-        Linux skills: You are confident in using the Linux console.""",
-        "BODY_WORD_COUNT": "320",
+        Programming skills: You are proficient in Python and other common technologies. """,
+        "BODY_WORD_COUNT": "300",
         "TIMEZONE": "Europe/Berlin",                                                                                  
         "TEMPLATE_PATH": "src/template.docx",
         "OUTPUT_FILE_NAME": "Cover_Letter_Sarvesh_Telang",
