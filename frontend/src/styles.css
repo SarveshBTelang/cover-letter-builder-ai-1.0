@@ -1,0 +1,235 @@
+.title {
+  color: #22c55e; /* green */
+}
+
+:root {
+  --bg: #0b0f14;
+  --bg-gradient: linear-gradient(145deg, #070a0f, #0f1722);
+
+  --card: rgba(18, 24, 34, 0.75);
+  --card-border: rgba(255, 255, 255, 0.06);
+
+  --text: #e6edf3;
+  --muted: #9aa4b2;
+
+  --green: #22c55e;
+  --blue: #3b82f6;
+
+  --green-glow: rgba(34, 197, 94, 0.45);
+  --blue-glow: rgba(59, 130, 246, 0.45);
+
+  --input-bg: rgba(255, 255, 255, 0.04);
+  --input-border: rgba(255, 255, 255, 0.08);
+
+  --focus-glow: rgba(59, 130, 246, 0.25);
+}
+
+/* ===== Base ===== */
+body {
+  margin: 0;
+  font-family: Inter, system-ui;
+  background: var(--bg-gradient);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Layout ===== */
+.app-layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* LEFT CARD */
+.container {
+  flex: 1;
+  padding: 28px;
+  margin: 20px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  overflow-y: auto;
+  backdrop-filter: blur(12px);
+}
+
+/* RIGHT TERMINAL */
+.terminal {
+  width: 40%;
+  background: #000;
+  color: #00ff88;
+  font-family: monospace;
+  padding: 15px;
+  overflow-y: auto;
+  border-left: 2px solid #222;
+}
+
+/* ===== Form ===== */
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.form-label {
+  width: 160px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* input wrapper */
+.input-wrapper {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+}
+
+/* input */
+.rect-input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text);
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+/* default placeholder style */
+.default-input {
+  color: #9aa4b2;
+  font-style: italic;
+}
+
+/* focus */
+.rect-input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px var(--focus-glow);
+}
+
+/* paste button */
+.paste-btn {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.paste-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+/* ===== BUTTONS ===== */
+.button-row {
+  display: flex;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+/* base button */
+.btn {
+  position: relative;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+
+  transition: all 0.25s ease;
+  overflow: hidden;
+}
+
+/* glow layer */
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: -1;
+}
+
+/* hover lift */
+.btn:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* click feedback */
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* ===== GREEN BUTTON ===== */
+.btn-green {
+  background: linear-gradient(135deg, #16a34a, var(--green));
+  box-shadow: 0 4px 18px rgba(34, 197, 94, 0.15);
+}
+
+.btn-green::before {
+  background: radial-gradient(circle at center, var(--green-glow), transparent 70%);
+}
+
+.btn-green:hover::before {
+  opacity: 1;
+}
+
+.btn-green:hover {
+  box-shadow:
+    0 6px 25px rgba(34, 197, 94, 0.35),
+    0 0 18px var(--green-glow);
+}
+
+/* ===== BLUE BUTTON ===== */
+.btn-blue {
+  background: linear-gradient(135deg, #2563eb, var(--blue));
+  box-shadow: 0 4px 18px rgba(59, 130, 246, 0.15);
+}
+
+.btn-blue::before {
+  background: radial-gradient(circle at center, var(--blue-glow), transparent 70%);
+}
+
+.btn-blue:hover::before {
+  opacity: 1;
+}
+
+.btn-blue:hover {
+  box-shadow:
+    0 6px 25px rgba(59, 130, 246, 0.35),
+    0 0 18px var(--blue-glow);
+}
+
+/* ===== ERROR ===== */
+.error {
+  color: #ff4d4f;
+  margin-bottom: 10px;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 1024px) {
+  .app-layout {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .terminal {
+    width: 100%;
+    height: 300px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-label {
+    width: 100%;
+  }
+}
