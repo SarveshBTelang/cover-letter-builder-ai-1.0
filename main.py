@@ -3,7 +3,7 @@ Fast API backend for the Cover Letter Builder AI application. This module define
 
 Author: Sarvesh Telang
 """
-
+import os
 from typing import Optional, List
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.responses import FileResponse
@@ -51,9 +51,11 @@ class ConnectionManager:
 app = FastAPI()
 manager = ConnectionManager()
 
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[FRONTEND_URL],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -5,7 +5,7 @@ import { fetchDefaults, generatePdf, downloadDocx } from "./api";
 export default function App() {
   const [defaults, setDefaults] = useState({});
   const [form, setForm] = useState({});
-  const [touched, setTouched] = useState({}); // 🔥 track default vs edited
+  const [touched, setTouched] = useState({});
 
   const [loadingPdf, setLoadingPdf] = useState(false);
   const [loadingDocx, setLoadingDocx] = useState(false);
@@ -29,26 +29,46 @@ export default function App() {
     logEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [logs]);
 
+  // =========================
+  // 🔥 WebSocket (PROD SAFE)
+  // =========================
   function connectWebSocket() {
-    const ws = new WebSocket("ws://localhost:8000/ws/logs");
+    const WS_BASE =
+      window.location.hostname === "localhost"
+        ? "ws://localhost:8000"
+        : "wss://cover-letter-builder-ai-10-production.up.railway.app";
+
+    const ws = new WebSocket(`${WS_BASE}/ws/logs`);
+
+    ws.onopen = () => {
+      console.log("WebSocket connected");
+    };
 
     ws.onmessage = (event) => {
       setLogs((prev) => [...prev, event.data]);
     };
 
+    ws.onerror = (err) => {
+      console.error("WebSocket error:", err);
+    };
+
     ws.onclose = () => {
-      setTimeout(connectWebSocket, 2000);
+      console.warn("WebSocket closed. Reconnecting...");
+      setTimeout(connectWebSocket, 3000); // safer retry delay
     };
 
     wsRef.current = ws;
   }
 
+  // =========================
+  // Load defaults
+  // =========================
   async function loadDefaults() {
     try {
       const data = await fetchDefaults();
       setDefaults(data);
       setForm(data);
-      setTouched({}); // reset touched
+      setTouched({});
     } catch (err) {
       setError(err.message);
     }
@@ -126,10 +146,13 @@ export default function App() {
       {/* LEFT PANEL */}
       <div className="container">
         <h1 className="title">Cover Letter Builder AI 1.0</h1>
+
         <h4 className="subtitle">
-          ▸ Automated Cover Letter Generation using LLMs in docx and pdf format using custom job description and resume inputs
-          <br></br>▸ Sync and update LLM context files (Instructions, Resume, Letter Structure etc.) via Cloudflare R2 API
+          ▸ Automated Cover Letter Generation using LLMs in docx and pdf format  
+          <br />
+          ▸ Sync and update LLM context files via Cloud storage
         </h4>
+
         <h5 className="author" style={{ fontWeight: 300, fontStyle: "italic" }}>
           Author: Sarvesh Telang
         </h5>
@@ -171,7 +194,6 @@ export default function App() {
           {Object.keys(defaults).length ? "Yes" : "No"}
         </div>
       </div>
-
 
       {/* RIGHT TERMINAL */}
       <div className="terminal">
