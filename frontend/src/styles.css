@@ -123,6 +123,21 @@ body {
   transform: translateY(-1px);
 }
 
+.clear-btn {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ff6b6b; /* subtle red tone */
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.clear-btn:hover {
+  background: rgba(255, 107, 107, 0.15);
+  transform: translateY(-1px);
+}
+
 /* ===== BUTTONS ===== */
 .button-row {
   display: flex;

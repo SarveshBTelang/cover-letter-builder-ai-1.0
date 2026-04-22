@@ -35,6 +35,10 @@ export default function FormField({
         <button type="button" className="paste-btn" onClick={handlePaste}>
           Paste
         </button>
+
+        <button type="button" className="clear-btn" onClick={handleClear}>
+          Clear
+        </button>
       </div>
     </div>
   );
