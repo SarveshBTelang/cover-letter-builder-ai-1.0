@@ -36,12 +36,19 @@ export default function App() {
     const WS_BASE =
       window.location.hostname === "localhost"
         ? "ws://localhost:8000"
-        : "wss://cover-letter-builder-ai-10-production.up.railway.app";
+        : "wss://cover-letter-builder-ai-1-0.onrender.com";
 
-    const ws = new WebSocket(`${WS_BASE}/ws/logs`);
+    const wsUrl = `${WS_BASE}/ws/logs`;
+
+    // Prevent multiple connections (VERY IMPORTANT for React StrictMode)
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      return;
+    }
+
+    const ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
-      console.log("WebSocket connected");
+      console.log("✅ WebSocket connected:", wsUrl);
     };
 
     ws.onmessage = (event) => {
@@ -49,12 +56,17 @@ export default function App() {
     };
 
     ws.onerror = (err) => {
-      console.error("WebSocket error:", err);
+      console.error("❌ WebSocket error:", err);
     };
 
     ws.onclose = () => {
-      console.warn("WebSocket closed. Reconnecting...");
-      setTimeout(connectWebSocket, 3000); // safer retry delay
+      console.warn("⚠️ WebSocket closed. Reconnecting in 3s...");
+
+      wsRef.current = null;
+
+      setTimeout(() => {
+        connectWebSocket();
+      }, 3000);
     };
 
     wsRef.current = ws;
