@@ -46,8 +46,8 @@ def get_default_config():
         "TIMEZONE": "Europe/Berlin",                                                                                  
         "TEMPLATE_PATH": "src/template.docx",
         "OUTPUT_FILE_NAME": "Cover_Letter_Sarvesh_Telang",
-        #"LIBREOFFICE_PATH": "/usr/bin/libreoffice",  # Railway path
-        "LIBREOFFICE_PATH" : r"C:\Program Files\LibreOffice\program\soffice.exe", # Local path for testing (Windows)
+        "LIBREOFFICE_PATH": "/usr/bin/soffice",  # Render path
+        #"LIBREOFFICE_PATH" : r"C:\Program Files\LibreOffice\program\soffice.exe", # Local path for testing (Windows)
     }
 
     get_timezone = pytz.timezone(config["TIMEZONE"])
