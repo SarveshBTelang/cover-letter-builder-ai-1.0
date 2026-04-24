@@ -122,7 +122,7 @@ async def generate_letter(config, log=None):
     docx_path = output_dir / f"{config['OUTPUT_FILE_NAME']}.docx"
     doc.save(docx_path)
 
-    r2_docx_key = f"docx/{docx_path.name}"
+    r2_docx_key = "docx/main.docx"
     upload_to_r2(docx_path, r2_docx_key)
 
     # Step 6
