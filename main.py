@@ -6,11 +6,12 @@ Author: Sarvesh Telang
 import os
 from typing import Optional, List
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from pathlib import Path
 import asyncio
+import boto3
 
 from config import get_default_config
 from service import generate_letter
@@ -64,6 +65,18 @@ app.add_middleware(
 output_dir = Path("output")
 output_dir.mkdir(exist_ok=True)
 
+# ---------- R2 CONFIG ----------
+R2_ACCESS_KEY = os.getenv("R2_ACCESS_KEY")
+R2_SECRET_KEY = os.getenv("R2_SECRET_KEY")
+R2_ENDPOINT = os.getenv("R2_ENDPOINT")
+R2_BUCKET = os.getenv("R2_BUCKET")
+
+s3 = boto3.client(
+    "s3",
+    endpoint_url=R2_ENDPOINT,
+    aws_access_key_id=R2_ACCESS_KEY,
+    aws_secret_access_key=R2_SECRET_KEY,
+)
 
 # =========================
 # Request Model
@@ -133,16 +146,30 @@ async def generate(data: RequestLetterService):
 
 @app.get("/download/docx")
 async def download_docx():
-    file_path = output_dir / "main.docx"
+    object_key = "docx/main.docx"  # R2 path
 
-    if not file_path.exists():
-        raise HTTPException(status_code=404, detail="File not found")
+    try:
+        response = s3.get_object(
+            Bucket=R2_BUCKET,
+            Key=object_key
+        )
 
-    return FileResponse(
-        path=file_path,
-        filename="main.docx",
-        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    )
+        file_stream = response["Body"]  # streaming body
+
+        return StreamingResponse(
+            file_stream,
+            media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            headers={
+                "Content-Disposition": 'attachment; filename="main.docx"'
+            }
+        )
+
+    except s3.exceptions.NoSuchKey:
+        raise HTTPException(status_code=404, detail="File not found in R2")
+
+    except Exception as e:
+        print(f"[R2 ERROR] {e}")
+        raise HTTPException(status_code=500, detail="Error downloading file")
 
 
 # =========================

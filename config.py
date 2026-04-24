@@ -30,7 +30,7 @@ def get_default_config():
         Software architecture: You will contribute to the design and consulting for component-based software architectures.
 
         Programming skills: You are proficient in Python and other common technologies. """,
-        "BODY_WORD_COUNT": "300",
+        "BODY_WORD_COUNT": "180",
         "TIMEZONE": "Europe/Berlin",                                                                                  
         "TEMPLATE_PATH": "src/template.docx",
         "OUTPUT_FILE_NAME": "Cover_Letter_Sarvesh_Telang",

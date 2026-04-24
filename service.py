@@ -5,6 +5,7 @@ Author: Sarvesh Telang
 """
 
 
+import os
 from docx import Document
 from pathlib import Path
 import subprocess
@@ -13,13 +14,37 @@ from fastapi import HTTPException
 import msoffcrypto
 import io
 import asyncio
+import boto3
 
 from generate_response import generate_cover_letter_body, extract_job_context
+
+# ---------- R2 CONFIG ----------
+R2_ACCESS_KEY = os.getenv("R2_ACCESS_KEY")
+R2_SECRET_KEY = os.getenv("R2_SECRET_KEY")
+R2_ENDPOINT = os.getenv("R2_ENDPOINT")
+R2_BUCKET = os.getenv("R2_BUCKET")
+
+s3 = boto3.client(
+    "s3",
+    endpoint_url=R2_ENDPOINT,
+    aws_access_key_id=R2_ACCESS_KEY,
+    aws_secret_access_key=R2_SECRET_KEY,
+)
 
 def normalize_value(value):
     if isinstance(value, (tuple, list)):
         return value[0]
     return value
+
+def upload_to_r2(file_path: Path, key: str):
+    try:
+        s3.upload_file(
+            Filename=str(file_path),
+            Bucket=R2_BUCKET,
+            Key=key
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"R2 upload failed: {str(e)}")
 
 async def progress_bar(send, total_steps):
     current = 0
@@ -96,6 +121,9 @@ async def generate_letter(config, log=None):
 
     docx_path = output_dir / f"{config['OUTPUT_FILE_NAME']}.docx"
     doc.save(docx_path)
+
+    r2_docx_key = f"docx/{docx_path.name}"
+    upload_to_r2(docx_path, r2_docx_key)
 
     # Step 6
     await update("Converting to PDF...")
