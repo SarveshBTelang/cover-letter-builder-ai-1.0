@@ -162,7 +162,7 @@ export default function App() {
         <h4 className="subtitle">
           ▸ Automated Cover Letter Generation using LLMs in docx and pdf format  
           <br />
-          ▸ Sync and update LLM context files via Cloud storage
+          ▸ Sync and update LLM context files via Cloudflare R2 Storage
         </h4>
 
         <h5 className="author" style={{ fontWeight: 300, fontStyle: "italic" }}>
