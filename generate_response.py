@@ -7,6 +7,8 @@ Configure custom LLM API integration by modifying the `generate_cover_letter_bod
 
 import os
 from pathlib import Path
+
+from openai import api_key
 import boto3
 from dotenv import load_dotenv
 
@@ -14,14 +16,22 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # ---------------- MISTRAL ----------------
-from mistralai.client import Mistral
+#from mistralai.client import Mistral
+from groq import Groq
 
-MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
-if not MISTRAL_API_KEY:
-    raise ValueError("MISTRAL_API_KEY not found in .env file")
+#MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+#if not MISTRAL_API_KEY:
+    #raise ValueError("MISTRAL_API_KEY not found in .env file")
 
-mistral_client = Mistral(api_key=MISTRAL_API_KEY)
-MISTRAL_MODEL = "mistral-large-latest"
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+if not GROQ_API_KEY:
+    raise ValueError("GROQ_API_KEY not found in .env file")
+
+#client = Mistral(api_key=MISTRAL_API_KEY)
+#model = "mistral-large-latest"
+
+client = Groq(api_key=GROQ_API_KEY)
+model = "openai/gpt-oss-120b"
 
 # ---------- R2 CONFIG ----------
 R2_ACCESS_KEY = os.getenv("R2_ACCESS_KEY")
@@ -132,8 +142,8 @@ Now generate the response:
 
     print(prompt)
 
-    response = mistral_client.chat.complete(
-        model=MISTRAL_MODEL,
+    response = client.chat.completions.create(
+        model=model,
         messages=[
             {"role": "user", "content": prompt}
         ],
