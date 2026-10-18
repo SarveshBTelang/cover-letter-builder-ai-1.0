@@ -7,8 +7,8 @@ Configure custom LLM API integration by modifying the `generate_cover_letter_bod
 
 import os
 from pathlib import Path
-
-from openai import api_key
+from openai import OpenAI
+#from openai import api_key
 import boto3
 from dotenv import load_dotenv
 
@@ -17,21 +17,31 @@ load_dotenv()
 
 # ---------------- MISTRAL ----------------
 #from mistralai.client import Mistral
-from groq import Groq
+#from groq import Groq
 
 #MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
 #if not MISTRAL_API_KEY:
     #raise ValueError("MISTRAL_API_KEY not found in .env file")
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-if not GROQ_API_KEY:
-    raise ValueError("GROQ_API_KEY not found in .env file")
+#GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+#if not GROQ_API_KEY:
+    #raise ValueError("GROQ_API_KEY not found in .env file")
+
+api_key = os.getenv("OPENROUTER_API_KEY")
+if not api_key:
+    raise ValueError("OPENROUTER_API_KEY not found in .env")
+
+model = os.getenv("OPENROUTER_MODEL", "openrouter/free")
 
 #client = Mistral(api_key=MISTRAL_API_KEY)
 #model = "mistral-large-latest"
 
-client = Groq(api_key=GROQ_API_KEY)
-model = "openai/gpt-oss-120b"
+#client = Groq(api_key=GROQ_API_KEY)
+#model = "openai/gpt-oss-120b"
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=api_key
+)
 
 # ---------- R2 CONFIG ----------
 R2_ACCESS_KEY = os.getenv("R2_ACCESS_KEY")
@@ -125,7 +135,7 @@ Write a professional cover letter BODY paragraph.
 
 RULES:
 - Only output the BODY text (no subject, no greeting, no signature)
-- Assume the greeting as "Dear Hiring Manager"
+- Assume the greeting as "Dear Hiring Manager" without mentioning it in the output
 - Write in {config['BODY_WORD_COUNT']} words (this should fit ~1 page in Word with 12pt font, normal margins).
 - Strictly use the provided instructions and context
 - Avoid generic phrases
