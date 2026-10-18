@@ -76,8 +76,8 @@ async def generate_letter(config, log=None):
 
     # Step 2
     await update("Generating LLM response...")
-    #body = generate_cover_letter_body(config)
-    body = "SAMPLE BODY"
+    body = generate_cover_letter_body(config)
+    #body = "SAMPLE BODY"
     body = body.replace("*", "")
 
     try:
