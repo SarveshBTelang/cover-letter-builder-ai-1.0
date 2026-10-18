@@ -76,7 +76,8 @@ async def generate_letter(config, log=None):
 
     # Step 2
     await update("Generating LLM response...")
-    body = generate_cover_letter_body(config)
+    #body = generate_cover_letter_body(config)
+    body = "SAMPLE BODY"
     body = body.replace("*", "")
 
     try:
@@ -136,3 +137,22 @@ async def generate_letter(config, log=None):
     ], check=True)
 
     return docx_path.with_suffix(".pdf"), docx_path
+
+if __name__ == "__main__":
+    """
+    For testing service.py directly from the command line.
+    """
+    from config import get_default_config
+
+    config = get_default_config()
+
+    try:
+        pdf_path, docx_path = asyncio.run(generate_letter(config))
+
+        print("\n✅ Cover letter generated successfully!")
+        print(f"DOCX: {docx_path.resolve()}")
+        print(f"PDF:  {pdf_path.resolve()}")
+
+    except Exception as e:
+        print(f"\n❌ Cover letter generation failed: {e}")
+        raise
